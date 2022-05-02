@@ -73,6 +73,7 @@ r.squaredGLMM(pop.breadth.lmer)
 # [1,] 0.004975914 0.9546151
 
 
+
 #############################################
 ## population breadth ~ variation in T-opt ## 
 #############################################
@@ -167,67 +168,59 @@ r.squaredGLMM(pop.breadth.var.lmer)
 ## Figure 3: Results that correspond to hypotheses/models ##
 ############################################################
 
-se1 <- 0.5
+se1 <- 0.3
 
-m1 <- 0.06223
-b1 <- 28.47168
-
-h1_lines = data.frame(x = c(min(var$fam.breadth), max(var$fam.breadth)),
-                      y = c(b1 + m1 * min(var$fam.breadth), b1 + m1 * max(var$fam.breadth)))
-
-h1 <- ggplot(tpc) + 
+h1 <- ggplot(tpc, aes(y=pop.breadth, x=t.breadth2)) + 
   geom_point(aes(x=t.breadth2, y=pop.breadth, fill=species), shape=21, size=4, alpha=0.8, color="gray25") + 
   ggtitle("A") + theme_bw() + 
-  xlab(expression(family ~italic(T[breadth]))) + 
-  ylab(expression(population ~italic(T[breadth]))) + 
+  xlab(expression(family ~italic(T[breadth]))) + ylab("  ") +
   #geom_point(data=var, aes(y=pop.breadth, x=fam.breadth), shape=3, size=4, stroke=1, color="black") + 
-  scale_fill_manual(name="Species", values=c("mediumpurple3","thistle","goldenrod2","lightgoldenrod1","green4","palegreen1","royalblue3","lightskyblue1","violetred3","palevioletred1"), 
+  scale_fill_manual(name="Species", values=c("mediumpurple3","thistle1","goldenrod2","lightgoldenrod1","green4","palegreen1","royalblue3","lightskyblue1","violetred3","pink1"), 
                      breaks=c("par","car","ver","eas", "bic", "fil","flo", "nor","lac", "gut"), 
                      labels=c("M. parishii","M. cardinalis","M. verbanaceous","M. eastwoodiae", "M. bicolor", "M. filicaulis","M. floribundus", "M. norrisii","M. laciniatus", "M. guttatus")) + 
-  theme(legend.position = "bottom", text=element_text(size=25),  legend.text=element_text(size=25, face="italic"), 
-        panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
+  theme(legend.position = "bottom", text=element_text(size=23),  legend.text=element_text(size=20, face="italic"), 
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(), legend.direction = "vertical") + 
   guides(fill=guide_legend(override.aes=list(size=5))) + geom_abline(slope=1 , intercept=0, color="gray", size=2) + 
-  geom_point(data=var, aes(x=fam.breadth, y=pop.breadth), fill="black", shape=23, size=2) + 
-  geom_errorbar(data=var, aes(x=fam.breadth, y=pop.breadth, xmin=fam.breadth.cmin, xmax=fam.breadth.cmax, width=se1)) + 
-  geom_errorbar(data=var, aes(x=fam.breadth, y=pop.breadth, ymin=pop.breadth.cmin, ymax=pop.breadth.cmax, width=se1)) + 
-  geom_line(aes(y=y, x=x), data=h1_lines, size=1)
+  geom_point(data=var, aes(x=fam.breadth, y=pop.breadth), fill="black", shape=23, size=3) + 
+  geom_errorbar(data=var, aes(x=fam.breadth, y=pop.breadth, xmin=fam.breadth.cmin, xmax=fam.breadth.cmax, width=se1, alpha=0.75), show.legend=FALSE) + 
+  geom_errorbar(data=var, aes(x=fam.breadth, y=pop.breadth, ymin=pop.breadth.cmin, ymax=pop.breadth.cmax, width=se1, alpha=0.75), show.legend=FALSE) + 
+  geom_line(aes(y = predict(pop.breadth.lmer), color=pair), size=1, show.legend=FALSE) + 
+  scale_color_manual(values=c("mediumpurple4", "darkgoldenrod","darkgreen","royalblue4", "violetred4"), 
+                     breaks=c("car-par","ver-eas", "bic-fil", "flo-nor","gut-lac")) + guides(fill=guide_legend(ncol=2))
 
-m2 <- 0.5084
-b2 <- 25.5181
 
-h2_lines = data.frame(x = c(min(var$opt.var), max(var$opt.var)),
-                      y = c(b2 + m2 * min(var$opt.var), b2 + m2 * max(var$opt.var)))
-
-h2 <- ggplot(var) + 
+h2 <- ggplot(var, aes(y=pop.breadth, x=opt.var)) + 
   theme_bw() + 
-  theme(legend.position = "none", text=element_text(size=25), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
+  theme(legend.position = "none", text=element_text(size=23), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
   xlab(expression(family ~italic(T[opt])~ variance)) + 
   ylab(" ") + ggtitle("B") + 
-  scale_fill_manual(name="Species", values=c("mediumpurple3","thistle","goldenrod2","lightgoldenrod1","green4","palegreen1","royalblue3","lightskyblue1","violetred3","palevioletred1"), 
+  scale_fill_manual(name="Species", values=c("mediumpurple3","thistle1","goldenrod2","lightgoldenrod1","green4","palegreen1","royalblue3","lightskyblue1","violetred3","pink1"), 
                     breaks=c("par","car","ver","eas", "bic", "fil","flo", "nor","lac", "gut"), 
                     labels=c("M. parishii","M. cardinalis","M. verbanaceous","M. eastwoodiae", "M. bicolor", "M. filicaulis","M. floribundus", "M. norrisii","M. laciniatus", "M. guttatus")) + 
-  geom_errorbar(data=var, aes(x=opt.var, y=pop.breadth, xmin=opt.var.cmin, xmax=opt.var.cmax, width=se1)) + 
-  geom_errorbar(data=var, aes(x=opt.var, y=pop.breadth, ymin=pop.breadth.cmin, ymax=pop.breadth.cmax, width=se1)) + 
+  geom_errorbar(data=var, aes(x=opt.var, y=pop.breadth, xmin=opt.var.cmin, xmax=opt.var.cmax, width=se1, alpha=0.75)) + 
+  geom_errorbar(data=var, aes(x=opt.var, y=pop.breadth, ymin=pop.breadth.cmin, ymax=pop.breadth.cmax, width=se1, alpha=0.75)) + 
   geom_point(aes(x=opt.var, y=pop.breadth, fill=species), shape=21, size=5, stroke=1, color="gray25") + 
-  geom_line(aes(y=y, x=x), data=h2_lines, size=1)
-
-m3 <- 0.2747
-b3 <- 27.7796
+  geom_line(aes(y = predict(pop.breadth.opt.lmer), color=pair), size=1) + 
+  scale_color_manual(values=c("mediumpurple4", "darkgoldenrod","darkgreen","royalblue4", "violetred4"), 
+                     breaks=c("car-par","ver-eas", "bic-fil", "flo-nor","gut-lac"))
+#  scale_color_manual(values=c("mediumpurple3", "goldenrod2","green4","royalblue3", "violetred3"), breaks=c("car-par","ver-eas", "bic-fil", "flo-nor","gut-lac"))
 
 h3_lines = data.frame(x = c(min(var$breadth.var), max(var$breadth.var)),
                       y = c(b3 + m3 * min(var$breadth.var), b3 + m3 * max(var$breadth.var)))
  
-h3 <- ggplot(var) + theme_bw() + 
-  theme(text=element_text(size=25), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
+h3 <- ggplot(var, aes(x=breadth.var, y=pop.breadth)) + theme_bw() + 
+  theme(text=element_text(size=23), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
   xlab(expression(family ~italic(T[breadth])~ variance)) + 
   ylab(" ") + ggtitle("C") + 
-    scale_fill_manual(name="Species", values=c("mediumpurple3","thistle","goldenrod2","lightgoldenrod1","green4","palegreen1","royalblue3","lightskyblue1","violetred3","palevioletred1"), 
+    scale_fill_manual(name="Species", values=c("mediumpurple3","thistle1","goldenrod2","lightgoldenrod1","green4","palegreen1","royalblue3","lightskyblue1","violetred3","pink1"), 
                       breaks=c("par","car","ver","eas", "bic", "fil","flo", "nor","lac", "gut"), 
                       labels=c("M. parishii","M. cardinalis","M. verbanaceous","M. eastwoodiae", "M. bicolor", "M. filicaulis","M. floribundus", "M. norrisii","M. laciniatus", "M. guttatus")) + 
-  geom_errorbar(data=var, aes(x=breadth.var, y=pop.breadth, xmin=breadth.var.cmin, xmax=breadth.var.cmax, width=se1)) + 
-  geom_errorbar(data=var, aes(x=breadth.var, y=pop.breadth, ymin=pop.breadth.cmin, ymax=pop.breadth.cmax, width=se1)) + 
+  geom_errorbar(data=var, aes(x=breadth.var, y=pop.breadth, xmin=breadth.var.cmin, xmax=breadth.var.cmax, width=se1, alpha=0.75)) + 
+  geom_errorbar(data=var, aes(x=breadth.var, y=pop.breadth, ymin=pop.breadth.cmin, ymax=pop.breadth.cmax, width=se1, alpha=0.75)) + 
   geom_point(aes(x=breadth.var, y=pop.breadth, fill=species), shape=21, size=5, stroke=1, color="gray25") + 
-  geom_line(aes(y=y, x=x), data=h3_lines, linetype=2, size=1)
+  geom_line(aes(y = predict(pop.breadth.var.lmer), color=pair), size=1, linetype="dashed") + 
+  scale_color_manual(values=c("mediumpurple4", "darkgoldenrod","darkgreen","royalblue4", "violetred4"), 
+                     breaks=c("car-par","ver-eas", "bic-fil", "flo-nor","gut-lac")) + xlim(NA, 17)
   
 ## extract legend ##
 g_legend<-function(a.gplot){
@@ -238,12 +231,19 @@ g_legend<-function(a.gplot){
 
 mylegend<-g_legend(h1)
 
+text = expression(paste(population ~italic(T[breadth])))
+lab <- ggplot() + annotate("text", x = 4, y = 25, size=10, angle=90, label=text) + theme_void()
+
+text = ""
+nolab <- ggplot() + annotate("text", x = 4, y = 25, size=23, label = text) + 
+  theme_void()
+
 ## assemble and export multipanel figure ##
-## note: this script is used to create figure 3 for the manuscript as of 2021-07-29
-pdf("Figures/3_Figure-3_hypothesis-testing-results.pdf",  height=7, width=18)
-grid.arrange(arrangeGrob(h1+theme(legend.position='hidden'), h2+theme(legend.position='hidden'),
-             h3+theme(legend.position='hidden'), mylegend, layout_matrix = rbind(c(1,2,3), c(4,4,4)), 
-             heights=c(6,1), widths=c(6,6,6), padding=unit(0.5)))
+## note: this script is used to create figure 3 for the manuscript as of 2022-05-01
+pdf("Figures/3_Figure-3_hypothesis-testing-results_vertical.pdf",  height=18.5, width=6.5)
+grid.arrange(arrangeGrob(nolab, h1+theme(legend.position='hidden'), lab, h2+theme(legend.position='hidden'),
+                        nolab, h3+theme(legend.position='hidden'), nolab, mylegend, ncol=2, nrow=4,
+                         heights=c(5.5,5.5,5.5,2), widths=c(0.4,6), padding = 0.1))
 dev.off()
 
 
