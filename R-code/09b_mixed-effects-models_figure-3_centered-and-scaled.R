@@ -1,7 +1,7 @@
 #### PROJECT: Mimulus niche breadth partitioning
 #### PURPOSE: Test hypotheses about how family-level breadth contributes to 
 ####          population-level breadth and create figure 3
-#### AUTHOR/LAST UPDATE: EMC/2021-07-29
+#### AUTHOR/LAST UPDATE: RCW/2022-08-19
 
 
 ## load packages ##
@@ -66,10 +66,10 @@ summary(pop.breadth.lmer)
 #             (Intr)
 # scl(t.brd2) 0.033  
 
-## calculate p-value for one tailed test ##
+## calculate p-value for two tailed test ##
 m1.pval <- summary(pop.breadth.lmer)$coefficients[,"Pr(>|t|)"][2]
-m1.pval/2
-# 0.03289543 
+m1.pval
+# 0.06579085 
 
 ## calculate marginal and conditional r2 ##
 r.squaredGLMM(pop.breadth.lmer)
@@ -78,16 +78,7 @@ r.squaredGLMM(pop.breadth.lmer)
 
 
 
-# Calculate sample size for testing slope for simple linear regression.
-install.packages("powerMediation")
-ss1 <- powerMediation::ss.SLR(power=0.8, 
-       lambda.a=0.08274, 
-       sigma.x=1, 
-       sigma.y=1, 
-       alpha = 0.05, 
-       verbose = TRUE)
-ss1$n
-# 1140.608
+
 
 #############################################
 ## population breadth ~ variation in T-opt ## 
@@ -124,10 +115,10 @@ summary(pop.breadth.opt.lmer)
 #             (Intr)
 # scal(pt.vr) 0.000
 
-## calculate p-value for one tailed test ##
+## calculate p-value for two tailed test ##
 m2.pval <- summary(pop.breadth.opt.lmer)$coefficients[,"Pr(>|t|)"][2]
-m2.pval/2
-# 0.03500124 
+m2.pval
+# 0.07000248 
 
 ## calculate marginal and conditional r2 ##
 r.squaredGLMM(pop.breadth.opt.lmer)
@@ -135,16 +126,7 @@ r.squaredGLMM(pop.breadth.opt.lmer)
 # [1,] 0.08662951 0.9309972
 
 
-# Calculate sample size for testing slope for simple linear regression.
-install.packages("powerMediation")
-ss2 <- powerMediation::ss.SLR(power=0.8, 
-                              lambda.a=2.908e-01, 
-                              sigma.x=1, 
-                              sigma.y=1, 
-                              alpha = 0.05, 
-                              verbose = TRUE)
-ss2$n
-# 86.95273
+
 
 #################################################
 ## population breadth ~ variation in T-breadth ##
@@ -179,26 +161,17 @@ summary(pop.breadth.var.lmer)
 #             (Intr)
 # scl(brdth.) 0.000 
 
-## calculate p-value for one tailed test ##
+## calculate p-value for two tailed test ##
 m3.pval <- summary(pop.breadth.var.lmer)$coefficients[,"Pr(>|t|)"][2]
-m3.pval/2
-# 0.2985703  
+m3.pval
+# 0.5971406  
 
 ## calculate marginal and conditional r2 ##
 r.squaredGLMM(pop.breadth.var.lmer)
 # R2m       R2c
 # [1,] 0.01425338 0.8405845
 
-# Calculate sample size for testing slope for simple linear regression.
-install.packages("powerMediation")
-ss3 <- powerMediation::ss.SLR(power=0.8, 
-                              lambda.a=1.196e-01, 
-                              sigma.x=1, 
-                              sigma.y=1, 
-                              alpha = 0.05, 
-                              verbose = TRUE)
-ss3$n
-# 542.8185
+
 
 ############################################################
 ## Figure 3: Results that correspond to hypotheses/models ##

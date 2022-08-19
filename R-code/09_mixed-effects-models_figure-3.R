@@ -1,7 +1,7 @@
 #### PROJECT: Mimulus niche breadth partitioning
 #### PURPOSE: Test hypotheses about how family-level breadth contributes to 
 ####          population-level breadth and create figure 3
-#### AUTHOR/LAST UPDATE: EMC/2021-07-29
+#### AUTHOR/LAST UPDATE: EMC/2022-08-19
 
 
 ## load packages ##
@@ -62,10 +62,10 @@ summary(pop.breadth.lmer)
 #   (Intr)
 # t.breadth2 -0.323
 
-## calculate p-value for one tailed test ##
+## calculate p-value for two tailed test ##
 m1.pval <- summary(pop.breadth.lmer)$coefficients[,"Pr(>|t|)"][2]
-m1.pval/2
-# 0.03289543 
+m1.pval
+# 0.06579085 
 
 ## calculate marginal and conditional r2 ##
 r.squaredGLMM(pop.breadth.lmer)
@@ -108,10 +108,10 @@ summary(pop.breadth.opt.lmer)
 # (Intr)
 # opt.var -0.631
 
-## calculate p-value for one tailed test ##
+## calculate p-value for two tailed test ##
 m2.pval <- summary(pop.breadth.opt.lmer)$coefficients[,"Pr(>|t|)"][2]
-m2.pval/2
-# 0.03500124 
+m2.pval
+# 0.07000248 
 
 ## calculate marginal and conditional r2 ##
 r.squaredGLMM(pop.breadth.opt.lmer)
@@ -153,10 +153,10 @@ summary(pop.breadth.var.lmer)
 # (Intr)
 # breadth.var -0.836
 
-## calculate p-value for one tailed test ##
+## calculate p-value for two tailed test ##
 m3.pval <- summary(pop.breadth.var.lmer)$coefficients[,"Pr(>|t|)"][2]
-m3.pval/2
-# 0.2985703  
+m3.pval
+# 0.5971406  
 
 ## calculate marginal and conditional r2 ##
 r.squaredGLMM(pop.breadth.var.lmer)
