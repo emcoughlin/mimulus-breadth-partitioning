@@ -38,7 +38,7 @@ tpc <- left_join(tpc, var.data, by="species")
 ## run model and get summary output ##
 pop.breadth.lmer <- lmer((pop.breadth) ~ (t.breadth2) + (1 | pair), data=tpc)
 pop.breadth.lmer2 <- lmer(scale(pop.breadth) ~ scale(t.breadth2) + (1 | pair), data=tpc)
-summary(pop.breadth.lmer)
+summary(pop.breadth.lmer2)
 # Linear mixed model fit by REML. t-tests use Satterthwaite's method ['lmerModLmerTest']
 # Formula: scale(pop.breadth) ~ scale(t.breadth2) + (1 | pair)
 #    Data: tpc
@@ -67,12 +67,12 @@ summary(pop.breadth.lmer)
 # scl(t.brd2) 0.033  
 
 ## calculate p-value for two tailed test ##
-m1.pval <- summary(pop.breadth.lmer)$coefficients[,"Pr(>|t|)"][2]
+m1.pval <- summary(pop.breadth.lmer2)$coefficients[,"Pr(>|t|)"][2]
 m1.pval
 # 0.06579085 
 
 ## calculate marginal and conditional r2 ##
-r.squaredGLMM(pop.breadth.lmer)
+r.squaredGLMM(pop.breadth.lmer2)
 #           R2m       R2c
 # [1,] 0.004975914 0.9546151
 
@@ -87,7 +87,7 @@ r.squaredGLMM(pop.breadth.lmer)
 ## run model and get summary output ##
 pop.breadth.opt.lmer <- lmer((pop.breadth) ~ (opt.var) + (1 | pair), data=var)
 pop.breadth.opt.lmer2 <- lmer(scale(pop.breadth) ~ scale(opt.var) + (1 | pair), data=var)
-summary(pop.breadth.opt.lmer)
+summary(pop.breadth.opt.lmer2)
 # Linear mixed model fit by REML. t-tests use Satterthwaite's method ['lmerModLmerTest']
 # Formula: scale(pop.breadth) ~ scale(opt.var) + (1 | pair)
 #    Data: var
@@ -116,12 +116,12 @@ summary(pop.breadth.opt.lmer)
 # scal(pt.vr) 0.000
 
 ## calculate p-value for two tailed test ##
-m2.pval <- summary(pop.breadth.opt.lmer)$coefficients[,"Pr(>|t|)"][2]
+m2.pval <- summary(pop.breadth.opt.lmer2)$coefficients[,"Pr(>|t|)"][2]
 m2.pval
 # 0.07000248 
 
 ## calculate marginal and conditional r2 ##
-r.squaredGLMM(pop.breadth.opt.lmer)
+r.squaredGLMM(pop.breadth.opt.lmer2)
 # R2m      R2c
 # [1,] 0.08662951 0.9309972
 
@@ -135,7 +135,7 @@ r.squaredGLMM(pop.breadth.opt.lmer)
 ## run model and get summary output ##
 pop.breadth.var.lmer <- lmer((pop.breadth) ~ (breadth.var) + (1 | pair), data=var)
 pop.breadth.var.lmer2 <- lmer(scale(pop.breadth) ~ scale(breadth.var) + (1 | pair), data=var)
-summary(pop.breadth.var.lmer)
+summary(pop.breadth.var.lmer2)
 # Linear mixed model fit by REML. t-tests use Satterthwaite's method ['lmerModLmerTest']
 # Formula: scale(pop.breadth) ~ scale(breadth.var) + (1 | pair)
 #    Data: var
@@ -162,12 +162,12 @@ summary(pop.breadth.var.lmer)
 # scl(brdth.) 0.000 
 
 ## calculate p-value for two tailed test ##
-m3.pval <- summary(pop.breadth.var.lmer)$coefficients[,"Pr(>|t|)"][2]
+m3.pval <- summary(pop.breadth.var.lmer2)$coefficients[,"Pr(>|t|)"][2]
 m3.pval
 # 0.5971406  
 
 ## calculate marginal and conditional r2 ##
-r.squaredGLMM(pop.breadth.var.lmer)
+r.squaredGLMM(pop.breadth.var.lmer2)
 # R2m       R2c
 # [1,] 0.01425338 0.8405845
 
