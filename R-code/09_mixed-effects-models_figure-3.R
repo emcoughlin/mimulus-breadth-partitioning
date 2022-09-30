@@ -1,7 +1,7 @@
 #### PROJECT: Mimulus niche breadth partitioning
 #### PURPOSE: Test hypotheses about how family-level breadth contributes to 
 ####          population-level breadth and create figure 3
-#### AUTHOR/LAST UPDATE: EMC/2022-08-19
+#### AUTHOR/LAST UPDATE: RCW/2022-08-19
 
 
 ## load packages ##
@@ -28,49 +28,55 @@ var.data <- select(var, species, pop.breadth)
 tpc <- left_join(tpc, var.data, by="species")
 
 
+
+
+
 #############################################
 # population breadth ~ family level breadth #
 #############################################
 
 ## run model and get summary output ##
-pop.breadth.lmer <- lmer(pop.breadth ~ t.breadth2 + (1 | pair), data=tpc)
-summary(pop.breadth.lmer)
+pop.breadth.lmer <- lmer((pop.breadth) ~ (t.breadth2) + (1 | pair), data=tpc)
+pop.breadth.lmer2 <- lmer(scale(pop.breadth) ~ scale(t.breadth2) + (1 | pair), data=tpc)
+summary(pop.breadth.lmer2)
 # Linear mixed model fit by REML. t-tests use Satterthwaite's method ['lmerModLmerTest']
-# Formula: pop.breadth ~ t.breadth2 + (1 | pair)
-# Data: tpc
+# Formula: scale(pop.breadth) ~ scale(t.breadth2) + (1 | pair)
+#    Data: tpc
 # 
-# REML criterion at convergence: 725
+# REML criterion at convergence: 51
 # 
 # Scaled residuals: 
-#   Min       1Q   Median       3Q      Max 
+#      Min       1Q   Median       3Q      Max 
 # -3.02492 -0.25744  0.00588  0.44081  1.84974 
 # 
 # Random effects:
-#   Groups   Name        Variance Std.Dev.
-# pair     (Intercept) 23.22    4.819   
-# Residual              1.11    1.053   
+#  Groups   Name        Variance Std.Dev.
+#  pair     (Intercept) 1.30640  1.1430  
+#  Residual             0.06244  0.2499  
 # Number of obs: 235, groups:  pair, 5
 # 
 # Fixed effects:
-#                 Estimate Std. Error        df t value Pr(>|t|)    
-# (Intercept)     28.47168    2.27824   4.90365  12.497 6.62e-05 ***
-#   t.breadth2    0.06223    0.03367 231.72130   1.849   0.0658 .  
+#                    Estimate Std. Error        df t value Pr(>|t|)  
+# (Intercept)        -0.36073    0.51174   3.95098  -0.705   0.5202  
+# scale(t.breadth2)   0.08274    0.04476 231.72130   1.849   0.0658 .
 # ---
-#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 # 
 # Correlation of Fixed Effects:
-#   (Intr)
-# t.breadth2 -0.323
+#             (Intr)
+# scl(t.brd2) 0.033  
 
 ## calculate p-value for two tailed test ##
-m1.pval <- summary(pop.breadth.lmer)$coefficients[,"Pr(>|t|)"][2]
+m1.pval <- summary(pop.breadth.lmer2)$coefficients[,"Pr(>|t|)"][2]
 m1.pval
 # 0.06579085 
 
 ## calculate marginal and conditional r2 ##
-r.squaredGLMM(pop.breadth.lmer)
+r.squaredGLMM(pop.breadth.lmer2)
 #           R2m       R2c
 # [1,] 0.004975914 0.9546151
+
+
 
 
 
@@ -79,44 +85,47 @@ r.squaredGLMM(pop.breadth.lmer)
 #############################################
 
 ## run model and get summary output ##
-pop.breadth.opt.lmer <- lmer(pop.breadth ~ opt.var + (1 | pair), data=var)
-summary(pop.breadth.opt.lmer)
+pop.breadth.opt.lmer <- lmer((pop.breadth) ~ (opt.var) + (1 | pair), data=var)
+pop.breadth.opt.lmer2 <- lmer(scale(pop.breadth) ~ scale(opt.var) + (1 | pair), data=var)
+summary(pop.breadth.opt.lmer2)
 # Linear mixed model fit by REML. t-tests use Satterthwaite's method ['lmerModLmerTest']
-# Formula: pop.breadth ~ opt.var + (1 | pair)
-# Data: var
+# Formula: scale(pop.breadth) ~ scale(opt.var) + (1 | pair)
+#    Data: var
 # 
-# REML criterion at convergence: 46.4
+# REML criterion at convergence: 17.9
 # 
 # Scaled residuals: 
-# Min       1Q   Median       3Q      Max 
+#      Min       1Q   Median       3Q      Max 
 # -0.84821 -0.62645 -0.02471  0.51413  1.12570 
 # 
-#  #Random effects:
-# Groups   Name        Variance Std.Dev.
-# pair     (Intercept) 22.131   4.704   
-# Residual              1.809   1.345   
+# Random effects:
+#  Groups   Name        Variance Std.Dev.
+#  pair     (Intercept) 0.82396  0.9077  
+#  Residual             0.06734  0.2595  
 # Number of obs: 10, groups:  pair, 5
-#
+# 
 # Fixed effects:
-# Estimate Std. Error      df t value Pr(>|t|)    
-# (Intercept)  25.5181     2.7668  7.5429   9.223 2.27e-05 ***
-# opt.var       0.5084     0.2130  4.3721   2.386     0.07 .  
+#                 Estimate Std. Error        df t value Pr(>|t|)  
+# (Intercept)    8.846e-16  4.142e-01 3.954e+00   0.000     1.00  
+# scale(opt.var) 2.908e-01  1.218e-01 4.372e+00   2.386     0.07 .
 # ---
 # Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 # 
 # Correlation of Fixed Effects:
-# (Intr)
-# opt.var -0.631
+#             (Intr)
+# scal(pt.vr) 0.000
 
 ## calculate p-value for two tailed test ##
-m2.pval <- summary(pop.breadth.opt.lmer)$coefficients[,"Pr(>|t|)"][2]
+m2.pval <- summary(pop.breadth.opt.lmer2)$coefficients[,"Pr(>|t|)"][2]
 m2.pval
 # 0.07000248 
 
 ## calculate marginal and conditional r2 ##
-r.squaredGLMM(pop.breadth.opt.lmer)
+r.squaredGLMM(pop.breadth.opt.lmer2)
 # R2m      R2c
 # [1,] 0.08662951 0.9309972
+
+
 
 
 #################################################
@@ -124,49 +133,50 @@ r.squaredGLMM(pop.breadth.opt.lmer)
 #################################################
 
 ## run model and get summary output ##
-pop.breadth.var.lmer <- lmer(pop.breadth ~ breadth.var + (1 | pair), data=var)
-summary(pop.breadth.var.lmer)
+pop.breadth.var.lmer <- lmer((pop.breadth) ~ (breadth.var) + (1 | pair), data=var)
+pop.breadth.var.lmer2 <- lmer(scale(pop.breadth) ~ scale(breadth.var) + (1 | pair), data=var)
+summary(pop.breadth.var.lmer2)
 # Linear mixed model fit by REML. t-tests use Satterthwaite's method ['lmerModLmerTest']
-# Formula: pop.breadth ~ breadth.var + (1 | pair)
-# Data: var
-#
-# REML criterion at convergence: 49.3
+# Formula: scale(pop.breadth) ~ scale(breadth.var) + (1 | pair)
+#    Data: var
+# 
+# REML criterion at convergence: 21.3
 # 
 # Scaled residuals: 
-# Min       1Q   Median       3Q      Max 
+#      Min       1Q   Median       3Q      Max 
 # -1.21460 -0.44997  0.06626  0.46405  1.08802 
-#
+# 
 # Random effects:
-# Groups   Name        Variance Std.Dev.
-# pair     (Intercept) 22.284   4.721   
-# Residual              4.299   2.073   
+#  Groups   Name        Variance Std.Dev.
+#  pair     (Intercept) 0.8296   0.9108  
+#  Residual             0.1601   0.4001  
 # Number of obs: 10, groups:  pair, 5
 # 
 # Fixed effects:
-# Estimate Std. Error      df t value Pr(>|t|)    
-# (Intercept)  27.7796     4.0259  7.7109   6.900 0.000148 ***
-# breadth.var   0.2747     0.4854  4.7384   0.566 0.597141    
-# ---
-# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#                     Estimate Std. Error        df t value Pr(>|t|)
+# (Intercept)        2.750e-16  4.265e-01 3.033e+00   0.000    1.000
+# scale(breadth.var) 1.196e-01  2.114e-01 4.738e+00   0.566    0.597
 # 
 # Correlation of Fixed Effects:
-# (Intr)
-# breadth.var -0.836
+#             (Intr)
+# scl(brdth.) 0.000 
 
 ## calculate p-value for two tailed test ##
-m3.pval <- summary(pop.breadth.var.lmer)$coefficients[,"Pr(>|t|)"][2]
+m3.pval <- summary(pop.breadth.var.lmer2)$coefficients[,"Pr(>|t|)"][2]
 m3.pval
 # 0.5971406  
 
 ## calculate marginal and conditional r2 ##
-r.squaredGLMM(pop.breadth.var.lmer)
+r.squaredGLMM(pop.breadth.var.lmer2)
 # R2m       R2c
 # [1,] 0.01425338 0.8405845
+
 
 
 ############################################################
 ## Figure 3: Results that correspond to hypotheses/models ##
 ############################################################
+
 
 se1 <- 0.3
 
@@ -176,8 +186,8 @@ h1 <- ggplot(tpc, aes(y=pop.breadth, x=t.breadth2)) +
   xlab(expression(family ~italic(T[breadth]))) + ylab("  ") +
   #geom_point(data=var, aes(y=pop.breadth, x=fam.breadth), shape=3, size=4, stroke=1, color="black") + 
   scale_fill_manual(name="Species", values=c("mediumpurple3","thistle1","goldenrod2","lightgoldenrod1","green4","palegreen1","royalblue3","lightskyblue1","violetred3","pink1"), 
-                     breaks=c("par","car","ver","eas", "bic", "fil","flo", "nor","lac", "gut"), 
-                     labels=c("M. parishii","M. cardinalis","M. verbanaceous","M. eastwoodiae", "M. bicolor", "M. filicaulis","M. floribundus", "M. norrisii","M. laciniatus", "M. guttatus")) + 
+                    breaks=c("par","car","ver","eas", "bic", "fil","flo", "nor","lac", "gut"), 
+                    labels=c("M. parishii","M. cardinalis","M. verbanaceous","M. eastwoodiae", "M. bicolor", "M. filicaulis","M. floribundus", "M. norrisii","M. laciniatus", "M. guttatus")) + 
   theme(legend.position = "bottom", text=element_text(size=23),  legend.text=element_text(size=20, face="italic"), 
         panel.grid.major = element_blank(), panel.grid.minor = element_blank(), legend.direction = "vertical") + 
   guides(fill=guide_legend(override.aes=list(size=5))) + geom_abline(slope=1 , intercept=0, color="gray", size=2) + 
@@ -205,6 +215,8 @@ h2 <- ggplot(var, aes(y=pop.breadth, x=opt.var)) +
                      breaks=c("car-par","ver-eas", "bic-fil", "flo-nor","gut-lac"))
 #  scale_color_manual(values=c("mediumpurple3", "goldenrod2","green4","royalblue3", "violetred3"), breaks=c("car-par","ver-eas", "bic-fil", "flo-nor","gut-lac"))
 
+b3 <- summary(pop.breadth.var.lmer)$coefficients[,"Estimate"][1]
+m3 <- summary(pop.breadth.var.lmer)$coefficients[,"Estimate"][2]
 h3_lines = data.frame(x = c(min(var$breadth.var), max(var$breadth.var)),
                       y = c(b3 + m3 * min(var$breadth.var), b3 + m3 * max(var$breadth.var)))
  
